@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{$title}</title>
+    {css href="__CSS__/bootstrap.min.css"}
+</head>
+<body>
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark justify-content-center fixed-top">
+        <ul class="navbar-nav">
+            <li class="nav-item active">
+                <a href="" class="nav-link">首页</a>
+            </li>
+            {volist name="navbar_data" id="value"}
+                <li class="nav-item active" style="text-align: center">
+                    <a href="javascript:" class="nav-link" data-value="{$value}">{$value}</a>
+                </li>
+            {/volist}
+        </ul>
+    </nav>
+    <div class="container-fluid" style="background-color: #D5D5D5">
+        <div class="row">
+            <div class="col-8" style="border: 1px solid red;background-color:#f0f0f0;height: 300px;position: relative;left: 18%">
+                <form class="form-control" style="position: relative;top: 80px">
+                    <label style="width: 65%;position: relative;left: 19%">
+                        <input type="text" class="form-control form-control-lg" id="value">
+                    </label>
+                </form>
+            </div>
+            <div class="col-2">
+                <div class="dropdown" style="position:absolute;top:100px;left: 22%">
+                    <button type="button" class="btn-primary dropdown-toggle w-100 h-25" data-bs-toggle="dropdown" id="search_grade">搜索引擎</button>
+                    <ul class="dropdown-menu">
+                        {foreach $search_data as $key=>$value}
+                        <li><a class="dropdown-item" href="javascript:" data-name='{$value["search_name"]}'>{$value["search_name"]}</a></li>
+                        {/foreach}
+                    </ul>
+                </div>
+                <button class="btn btn-info" style="width:100px;height:40px;position:absolute;top: 93px;right: 20%" id="search">搜索</button>
+            </div>
+        </div>
+    </div>
+</body>
+{js href="__JS__/bootstrap.bundle.min.js"}
+{js href="__JS__/jquery-3.6.0.min.js"}
+<script>
+    $(".dropdown-item").click(function () {
+        $("#search_grade").text($(this).data("name"))
+    })
+
+    $("#search").click(function () {
+        let search_name = $("#search_grade").text()
+        let search_value = $("#value").val()
+        if(search_name === "搜索引擎"){
+            alert("请选择一个搜索引擎")
+        }else {
+            $.get("/user/user/search",{"search_name":search_name, "search_value":search_value},
+            function (data, state) {
+                alert(data)
+            })
+        }
+    })
+</script>
+</html>
